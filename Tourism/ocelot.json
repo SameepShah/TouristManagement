@@ -4,9 +4,21 @@
   },
   "Routes": [
     {
-      "UpstreamPathTemplate": "/tourism/api/v1/branch/",
+      "UpstreamPathTemplate": "/tourism/api/v1/places/",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/WeatherForecast",
+      "DownstreamPathTemplate": "/api/branch/places",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7276
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/branches/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/branch/branches",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

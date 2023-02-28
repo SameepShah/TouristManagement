@@ -4,26 +4,26 @@ using Microsoft.Azure.Cosmos;
 
 namespace BranchAPI.Services
 {
-    public class BranchService : IBranchService
+    public class PlaceService : IPlaceService
     {
         private readonly ICosmosDBService _cosmosService;
         private readonly Container _container;
-        public BranchService(ICosmosDBService cosmosService)
+        public PlaceService(ICosmosDBService cosmosService)
         {
             _cosmosService = cosmosService;
-            _container = _cosmosService.GetContainer("Branches");
+            _container = _cosmosService.GetContainer("Places");
         }
 
         /// <summary>
-        /// Get All Branches (Move this method to CQRS (Query Part)
+        /// Get All Places (Move this method to CQRS (Query Part)
         /// Create Method that calls CQRS Query and get response
         /// </summary>
         /// <param name="queryString"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Branch>> GetAllAsync(string queryString)
+        public async Task<IEnumerable<Place>> GetAllAsync(string queryString)
         {
-            var query = _container.GetItemQueryIterator<Branch>(new QueryDefinition(queryString));
-            List<Branch> results = new List<Branch>();
+            var query = _container.GetItemQueryIterator<Place>(new QueryDefinition(queryString));
+            List<Place> results = new List<Place>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -31,6 +31,5 @@ namespace BranchAPI.Services
             }
             return results;
         }
-
     }
 }
