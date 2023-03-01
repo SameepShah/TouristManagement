@@ -1,5 +1,7 @@
 using BranchAPI.Services;
 using BranchAPI.Services.Interfaces;
+using FluentValidation.AspNetCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +14,16 @@ builder.Services.AddSingleton<ICosmosDBService>(options => {
     string databaseName= builder.Configuration.GetSection("AzureCosmosDbSettings").GetValue<string>("DatabaseName");
     return new CosmosDBService(url, primaryKey, databaseName);
 });
-builder.Services.AddControllers();
+
+builder.Services.AddControllers().AddFluentValidation(options =>
+{
+    // Validate child properties and root collection elements
+    options.ImplicitlyValidateChildProperties = true;
+    options.ImplicitlyValidateRootCollectionElements = true;
+
+    // Automatic registration of validators in assembly
+    options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+}); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
