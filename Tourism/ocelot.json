@@ -26,6 +26,30 @@
           "Port": 7276
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/branch/",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/branch/addbranch",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7276
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/editbranch/",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/branch/editbranch",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7276
+        }
+      ]
     }
   ]
 }

@@ -1,4 +1,5 @@
-﻿using BranchAPI.Services.Interfaces;
+﻿using BranchAPI.Models;
+using BranchAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -32,7 +33,7 @@ namespace BranchAPI.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Get All Branches
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -47,5 +48,52 @@ namespace BranchAPI.Controllers
             }
             return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches.ToList()));
         }
+
+        /// <summary>
+        /// Add Branch
+        /// </summary>
+        /// <param name="branch"></param>
+        /// <returns></returns>
+        [Route("addbranch")]
+        [HttpPost]
+        public async Task<IActionResult> AddBranch(Branch branch)
+        {
+            if (ModelState.IsValid)
+            {
+                BranchAddResponse response = await _branchService.AddBranchAsync(branch);
+                if (!string.IsNullOrEmpty(response.BranchId))
+                {
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, response.BranchId));
+                }
+                else {
+                    return await Task.FromResult(StatusCode((int)response.StatusCode, response.ErrorMessage));
+                }
+            }
+            return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, branch));
+        }
+
+
+        /// <summary>
+        /// Update Branch Tariff Details
+        /// </summary>
+        /// <param name="updateBranch"></param>
+        /// <returns></returns>
+        [Route("editbranch")]
+        [HttpPost]
+        public async Task<IActionResult> EditBranch(UpdateBranch updateBranch)
+        {
+            if (ModelState.IsValid)
+            {
+                var req = await _branchService.UpdateBranchAsync(updateBranch);
+                if (string.IsNullOrEmpty(req.BranchId))
+                {
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, "Branch not found"));
+                }
+
+                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, req.BranchId));
+            }
+            return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, updateBranch));
+        }
+
     }
 }

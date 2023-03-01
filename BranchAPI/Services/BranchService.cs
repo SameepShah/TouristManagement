@@ -32,5 +32,112 @@ namespace BranchAPI.Services
             return results;
         }
 
+        private Branch DefaultBranchProperties(Branch branch, bool isUpdate)
+        {
+            try
+            {
+                branch.Id = Guid.NewGuid().ToString();
+                branch.CreatedDate = DateTime.Now;
+                branch.ModifiedDate = isUpdate ? DateTime.Now : null;
+                return branch;
+            }
+            catch (Exception ex)
+            {
+                return branch;
+            }
+        }
+
+
+        /// <summary>
+        /// Add Branch Details
+        /// </summary>
+        /// <param name="branch"></param>
+        /// <returns></returns>
+        public async Task<BranchAddResponse> AddBranchAsync(Branch branch)
+        {
+            BranchAddResponse branchResponse = new BranchAddResponse();
+            try
+            {
+                branch = DefaultBranchProperties(branch, false);
+                var req = await _container.CreateItemAsync<Branch>(branch);
+                if (req.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    branchResponse.StatusCode = req.StatusCode;
+                    branchResponse.BranchId = branch.Id ?? string.Empty;
+                }
+                return branchResponse;
+            }
+            catch (CosmosException ex)
+            {
+                branchResponse.ErrorMessage = ex.Message;
+                branchResponse.StatusCode = ex.StatusCode;
+                branchResponse.BranchId = string.Empty;
+                return branchResponse;
+            }
+        }
+
+        /// <summary>
+        /// Get Branch By Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Branch> GetBranchAsync(string id, string branchCode)
+        {
+            try
+            {
+                ItemResponse<Branch> response = await _container.ReadItemAsync<Branch>(id, new PartitionKey(branchCode));
+                return response.Resource;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                throw;
+            }
+        }
+
+
+        private Branch UpdateBranchProperties(Branch branch, UpdateBranch entity)
+        {
+            try
+            {
+                branch.Tariffs = entity.Tariffs;
+                branch.ModifiedDate = DateTime.Now;
+                return branch;
+            }
+            catch (Exception ex)
+            {
+                return branch;
+            }
+        }
+
+        /// <summary>
+        /// Update Branch
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<BranchEditResponse> UpdateBranchAsync(UpdateBranch entity)
+        {
+            BranchEditResponse branchEditResponse = new BranchEditResponse();
+            try
+            {
+                var branch = await GetBranchAsync(entity.Id ?? string.Empty,entity.BranchCode ?? string.Empty);
+                if (branch != null)
+                {
+                    branch = UpdateBranchProperties(branch, entity);
+                    Branch updatedBranch =  await _container.UpsertItemAsync<Branch>(branch, new PartitionKey(entity.BranchCode));
+                    branchEditResponse.BranchId = updatedBranch.Id;
+                    branchEditResponse.StatusCode = System.Net.HttpStatusCode.OK;
+                }
+                return branchEditResponse;
+            }
+            catch (CosmosException ex)
+            {
+                branchEditResponse.ErrorMessage = ex.Message;
+                branchEditResponse.StatusCode = ex.StatusCode;
+                branchEditResponse.BranchId = string.Empty;
+                return branchEditResponse;
+            }
+        }
+
+
     }
 }
