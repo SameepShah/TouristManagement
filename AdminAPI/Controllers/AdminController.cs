@@ -29,8 +29,8 @@ namespace AdminAPI.Controllers
         [Route("consume")]
         public async Task<IActionResult> ConsumeMessage()
         {
-            _consumer.ConsumeMessage("branch");
-            return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, "Test"));
+            string message = _consumer.ConsumeMessage("branch");
+            return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, message));
         }
 
     }

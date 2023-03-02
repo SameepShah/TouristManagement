@@ -2,6 +2,6 @@
 {
     public interface IMessageConsumer
     {
-        void ConsumeMessage(string queueName);
+        string ConsumeMessage(string queueName);
     }
 }

@@ -22,20 +22,22 @@ namespace AdminAPI.Messaging
          
         }
 
-        public void ConsumeMessage(string queueName)
+        public string ConsumeMessage(string queueName)
         {
+            string messageResponse = string.Empty;
             _channel.QueueDeclare(queue: queueName,
                                exclusive: false);
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) =>
             {
                 var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                Console.WriteLine("Received message: {0}", message);
+                messageResponse = Encoding.UTF8.GetString(body);
+                Console.WriteLine("Received message: {0}", messageResponse);
             };
             _channel.BasicConsume(queue: queueName,
                              autoAck: true,
                              consumer: consumer);
+            return messageResponse;
         }
 
     }
