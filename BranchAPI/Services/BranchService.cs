@@ -1,4 +1,5 @@
-﻿using BranchAPI.Models;
+﻿using BranchAPI.Messaging;
+using BranchAPI.Models;
 using BranchAPI.Services.Interfaces;
 using Microsoft.Azure.Cosmos;
 
@@ -8,9 +9,11 @@ namespace BranchAPI.Services
     {
         private readonly ICosmosDBService _cosmosService;
         private readonly Container _container;
-        public BranchService(ICosmosDBService cosmosService)
+        private readonly IMessageProducer _messageProducer;
+        public BranchService(ICosmosDBService cosmosService, IMessageProducer messageProducer)
         {
             _cosmosService = cosmosService;
+            _messageProducer = messageProducer;
             _container = _cosmosService.GetContainer("Branches");
         }
 
@@ -64,6 +67,8 @@ namespace BranchAPI.Services
                 {
                     branchResponse.StatusCode = req.StatusCode;
                     branchResponse.BranchId = branch.Id ?? string.Empty;
+                    //Send Created Branch to RabbitMQ Queue
+                    _messageProducer.SendMessage("branch", branch);
                 }
                 return branchResponse;
             }

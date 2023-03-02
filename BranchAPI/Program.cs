@@ -1,3 +1,4 @@
+using BranchAPI.Messaging;
 using BranchAPI.Services;
 using BranchAPI.Services.Interfaces;
 using FluentValidation.AspNetCore;
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
+builder.Services.AddScoped<IMessageProducer, MessageProducer>();
+
 builder.Services.AddSingleton<ICosmosDBService>(options => {
     string url = builder.Configuration.GetSection("AzureCosmosDbSettings").GetValue<string>("URL");
     string primaryKey = builder.Configuration.GetSection("AzureCosmosDbSettings").GetValue<string>("PrimaryKey");
