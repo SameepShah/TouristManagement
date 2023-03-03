@@ -1,6 +1,10 @@
-﻿using RabbitMQ.Client;
+﻿using AdminAPI.Models;
+using AdminAPI.Services.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Text.Json;
 
 namespace AdminAPI.Messaging
 {
@@ -8,9 +12,10 @@ namespace AdminAPI.Messaging
     {
         private readonly IConnection _connection;
         private readonly IModel _channel;
-
-        public MessageConsumer(string hostName, string username, string password)
+        private readonly IDistributedCache _cache;
+        public MessageConsumer(string hostName, string username, string password, IDistributedCache cache)
         {
+            _cache = cache;
             var factory = new ConnectionFactory()
             {
                 HostName = hostName,
@@ -19,25 +24,37 @@ namespace AdminAPI.Messaging
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-         
+            //ConsumeMessage("branch");
         }
 
-        public string ConsumeMessage(string queueName)
+        public void ConsumeMessage(string queueName)
         {
-            string messageResponse = string.Empty;
             _channel.QueueDeclare(queue: queueName,
                                exclusive: false);
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) =>
             {
+                //Consumer to Receive Data from Branch API
                 var body = ea.Body.ToArray();
-                messageResponse = Encoding.UTF8.GetString(body);
-                Console.WriteLine("Received message: {0}", messageResponse);
+                var messageResponse = Encoding.UTF8.GetString(body);
+                string? serializedData = null;
+                byte[]? dataAsByteArray = null;
+                if (messageResponse != null)
+                {
+                    var branches = JsonSerializer.Deserialize<List<Branch>>(messageResponse);
+                    if (branches != null && branches.Count > 0)
+                    {
+                        //Set into Azure RedisCache
+                        serializedData = JsonSerializer.Serialize(branches);
+                        dataAsByteArray = Encoding.UTF8.GetBytes(serializedData);
+                        _cache.Set("branches", dataAsByteArray);
+                    }
+                }
             };
             _channel.BasicConsume(queue: queueName,
                              autoAck: true,
                              consumer: consumer);
-            return messageResponse;
+            
         }
 
     }

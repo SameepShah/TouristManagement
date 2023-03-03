@@ -39,7 +39,7 @@ namespace BranchAPI.Services
         {
             try
             {
-                branch.Id = Guid.NewGuid().ToString();
+                branch.id = Guid.NewGuid().ToString();
                 branch.CreatedDate = DateTime.Now;
                 branch.ModifiedDate = isUpdate ? DateTime.Now : null;
                 return branch;
@@ -66,9 +66,10 @@ namespace BranchAPI.Services
                 if (req.StatusCode == System.Net.HttpStatusCode.Created)
                 {
                     branchResponse.StatusCode = req.StatusCode;
-                    branchResponse.BranchId = branch.Id ?? string.Empty;
-                    //Send Created Branch to RabbitMQ Queue
-                    _messageProducer.SendMessage("branch", branch);
+                    branchResponse.BranchId = branch.id ?? string.Empty;
+                    var branches = await GetAllAsync("SELECT * FROM c");
+                    //Send All Branchs to RabbitMQ Queue
+                    _messageProducer.SendMessage("branch", branches);
                 }
                 return branchResponse;
             }
@@ -129,8 +130,11 @@ namespace BranchAPI.Services
                 {
                     branch = UpdateBranchProperties(branch, entity);
                     Branch updatedBranch =  await _container.UpsertItemAsync<Branch>(branch, new PartitionKey(entity.BranchCode));
-                    branchEditResponse.BranchId = updatedBranch.Id;
+                    branchEditResponse.BranchId = updatedBranch.id;
                     branchEditResponse.StatusCode = System.Net.HttpStatusCode.OK;
+                    var branches = await GetAllAsync("SELECT * FROM c");
+                    //Send All Branchs to RabbitMQ Queue
+                    _messageProducer.SendMessage("branch", branches);
                 }
                 return branchEditResponse;
             }
