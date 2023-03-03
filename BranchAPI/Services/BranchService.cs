@@ -105,7 +105,7 @@ namespace BranchAPI.Services
         {
             try
             {
-                branch.Tariffs = entity.Tariffs;
+                branch.Places = entity.Places;
                 branch.ModifiedDate = DateTime.Now;
                 return branch;
             }

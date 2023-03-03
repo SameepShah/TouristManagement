@@ -23,12 +23,8 @@ namespace BranchAPI.Models
         [JsonProperty(PropertyName = "Email")]
         public string? Email { get; set; }
 
-        [JsonProperty(PropertyName = "Place")]
-        public Place? Place { get; set; }
-        
-        [JsonProperty(PropertyName = "Tariffs")]
-        public List<Tariff>? Tariffs { get; set; }
-
+        [JsonProperty(PropertyName = "Places")]
+        public List<Place>? Places { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
     }
@@ -56,8 +52,8 @@ namespace BranchAPI.Models
         [JsonProperty(PropertyName = "BranchCode")]
         public string? BranchCode { get; set; }
 
-        [JsonProperty(PropertyName = "Tariffs")]
-        public List<Tariff>? Tariffs { get; set; }
+        [JsonProperty(PropertyName = "Places")]
+        public List<Place>? Places { get; set; }
 
     }
 

@@ -26,7 +26,7 @@ namespace BranchAPI.Controllers
         [Route("places")]
         public async Task<IActionResult> GetAllPlaces()
         {
-            var places = await _placeService.GetAllAsync("SELECT c.id, c.PlaceId, c.PlaceName FROM c");
+            var places = await _placeService.GetAllAsync("SELECT c.PlaceId, c.PlaceName, c.TariffAmount FROM c");
 
             if (!places.Any())
             {
@@ -64,10 +64,14 @@ namespace BranchAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(branch.Tariffs == null || branch.Tariffs.Count <= 0)
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff details must not be empty."));
+                if (branch.Places == null || branch.Places.Count <= 0)
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Place details must not be empty."));
 
-                var invalidtariffRangeCount = branch.Tariffs.Count(x => x.TariffAmount is < 50000 or > 100000);
+                var tariffNullCount = branch.Places.Count(x => x.TariffAmount == null || x.TariffAmount.ToString() == "");
+                if(tariffNullCount > 0)
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff must not be empty."));
+
+                var invalidtariffRangeCount = branch.Places.Count(x => x.TariffAmount is < 50000 or > 100000);
                 if(invalidtariffRangeCount > 0)
                     return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff must be in range between 50000 to 100000."));
 
@@ -95,10 +99,14 @@ namespace BranchAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (updateBranch.Tariffs == null || updateBranch.Tariffs.Count <= 0)
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff details must not be empty."));
+                if (updateBranch.Places == null || updateBranch.Places.Count <= 0)
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Place details must not be empty."));
 
-                var invalidtariffRangeCount = updateBranch.Tariffs.Count(x => x.TariffAmount is < 50000 or > 100000);
+                var tariffNullCount = updateBranch.Places.Count(x => x.TariffAmount == null || x.TariffAmount.ToString() == "");
+                if (tariffNullCount > 0)
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff must not be empty."));
+
+                var invalidtariffRangeCount = updateBranch.Places.Count(x => x.TariffAmount is < 50000 or > 100000);
                 if (invalidtariffRangeCount > 0)
                     return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff must be in range between 50000 to 100000."));
 
