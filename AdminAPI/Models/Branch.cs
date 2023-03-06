@@ -41,6 +41,9 @@ namespace AdminAPI.Models
 
         [JsonProperty(PropertyName = "Place")]
         public string? Place { get; set; }
+
+        [JsonProperty(PropertyName = "PaginationSorting")]
+        public PaginationSortingModel PaginationSorting { get; set; }
     }
 
 }

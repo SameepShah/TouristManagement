@@ -1,9 +1,11 @@
 ﻿using AdminAPI.Messaging;
 using AdminAPI.Models;
+using AdminAPI.Services;
 using AdminAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -84,12 +86,15 @@ namespace AdminAPI.Controllers
                 //Logic for Filtering Data based on Search Criteria
                 try
                 {
-                    var branchesResult = branches.Where(x => (!String.IsNullOrEmpty(searchCriteria.id) ? x.id.ToLower() == searchCriteria.id.ToLower() : true) &&
-                                                             (!String.IsNullOrEmpty(searchCriteria.BranchCode) ? x.BranchCode.ToLower() == searchCriteria.BranchCode.ToLower() : true) &&
-                                                             (!String.IsNullOrEmpty(searchCriteria.BranchName) ? x.BranchName.ToLower() == searchCriteria.BranchName.ToLower() : true) &&
-                                                             (!String.IsNullOrEmpty(searchCriteria.Place) ? x.Places.Any(p => p.PlaceName.ToLower() == searchCriteria.Place.ToLower()) : true)).ToList();
+                    var branchesResult = branches.Where(x => (!String.IsNullOrEmpty(searchCriteria.id) ? x.id!.ToLower() == searchCriteria.id.ToLower() : true) &&
+                                                             (!String.IsNullOrEmpty(searchCriteria.BranchCode) ? x.BranchCode!.ToLower() == searchCriteria.BranchCode.ToLower() : true) &&
+                                                             (!String.IsNullOrEmpty(searchCriteria.BranchName) ? x.BranchName!.ToLower() == searchCriteria.BranchName.ToLower() : true) &&
+                                                             (!String.IsNullOrEmpty(searchCriteria.Place) ? x.Places!.Any(p => p.PlaceName.ToLower() == searchCriteria.Place.ToLower()) : true)).ToList();
                     if (branchesResult.Count > 0)
                     {
+                        branchesResult = branchesResult.AsQueryable().OrderBy(searchCriteria.PaginationSorting.SortColumn!, searchCriteria.PaginationSorting.SortOrder)
+                                                                     .Skip((searchCriteria.PaginationSorting.PageIndex - 1) * searchCriteria.PaginationSorting.PageSize)
+                                                                     .Take(searchCriteria.PaginationSorting.PageSize).ToList();
                         return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branchesResult));
                     }
                     else
