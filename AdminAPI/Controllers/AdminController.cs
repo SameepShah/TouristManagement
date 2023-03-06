@@ -41,7 +41,7 @@ namespace AdminAPI.Controllers
             List<Branch> branches = new List<Branch>();
             if ((dataAsByteArray?.Count() ?? 0) > 0)
             {
-                serializedData = Encoding.UTF8.GetString(dataAsByteArray);
+                serializedData = Encoding.UTF8.GetString(dataAsByteArray!);
                 branches = JsonSerializer.Deserialize<List<Branch>>(serializedData);
                 return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches));
             }
@@ -59,7 +59,7 @@ namespace AdminAPI.Controllers
         {
             //Get from RedisCache else from Database
             string? serializedData = null;
-            byte[] dataAsByteArray = null;
+            byte[]? dataAsByteArray = null;
             try
             {
                 dataAsByteArray = await _cache.GetAsync("branches");
@@ -70,7 +70,7 @@ namespace AdminAPI.Controllers
             List<Branch> branches = new List<Branch>();
             if ((dataAsByteArray?.Count() ?? 0) > 0)
             {
-                serializedData = Encoding.UTF8.GetString(dataAsByteArray);
+                serializedData = Encoding.UTF8.GetString(dataAsByteArray!);
                 branches = JsonSerializer.Deserialize<List<Branch>>(serializedData);
                 return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches));
             }
