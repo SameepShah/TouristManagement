@@ -62,6 +62,18 @@
           "Port": 7052
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/admin/search",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/admin/search",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7052
+        }
+      ]
     }
   ]
 }

@@ -38,14 +38,65 @@ namespace AdminAPI.Controllers
             //Get from RedisCache else from Database
             string? serializedData = null;
             var dataAsByteArray = await _cache.GetAsync("branches");
+            List<Branch> branches = new List<Branch>();
             if ((dataAsByteArray?.Count() ?? 0) > 0)
             {
                 serializedData = Encoding.UTF8.GetString(dataAsByteArray);
-                var branches = JsonSerializer.Deserialize<List<Branch>>(serializedData);
+                branches = JsonSerializer.Deserialize<List<Branch>>(serializedData);
                 return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches));
             }
-            else {
-                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, "No Data in Cache so take it from database."));
+            return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, "No Branches Found in Redis Cache."));
+        }
+
+        /// <summary>
+        /// Search Places
+        /// </summary>
+        /// <param name="searchCriteria"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("search")]
+        public async Task<IActionResult> SearchPlaces(SearchBranch searchCriteria)
+        {
+            //Get from RedisCache else from Database
+            string? serializedData = null;
+            byte[] dataAsByteArray = null;
+            try
+            {
+                dataAsByteArray = await _cache.GetAsync("branches");
+            }
+            catch (Exception ex)
+            {
+            }
+            List<Branch> branches = new List<Branch>();
+            if ((dataAsByteArray?.Count() ?? 0) > 0)
+            {
+                serializedData = Encoding.UTF8.GetString(dataAsByteArray);
+                branches = JsonSerializer.Deserialize<List<Branch>>(serializedData);
+                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches));
+            }
+            else
+            {
+                //Get All Branches from Database
+                branches = await _adminService.GetAllAsync("SELECT * FROM c");
+            }
+            if (branches.Any())
+            {
+                //Logic for Filtering Data based on Search Criteria
+                var branchesResult = branches.Where(x => (!String.IsNullOrEmpty(searchCriteria.id) ? x.id.ToLower() == searchCriteria.id.ToLower() : true) &&  
+                                                         (!String.IsNullOrEmpty(searchCriteria.BranchCode) ? x.BranchCode.ToLower() == searchCriteria.BranchCode.ToLower() : true) &&
+                                                         (!String.IsNullOrEmpty(searchCriteria.BranchName) ? x.BranchName.ToLower() == searchCriteria.BranchName.ToLower() : true) && 
+                                                         (!String.IsNullOrEmpty(searchCriteria.Place) ? x.Places.Any(p => p.PlaceName.ToLower() ==  searchCriteria.Place.ToLower()) : true)).ToList();
+                if (branchesResult.Count > 0)
+                {
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branchesResult));
+                }
+                else {
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, "No places found with search criteria."));
+                }
+            }
+            else
+            {
+                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, "No places Found."));
             }
         }
 

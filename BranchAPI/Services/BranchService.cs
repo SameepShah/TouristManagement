@@ -18,7 +18,7 @@ namespace BranchAPI.Services
         }
 
         /// <summary>
-        /// Get All Branches (Move this method to CQRS (Query Part)
+        /// Get All Branches 
         /// Create Method that calls CQRS Query and get response
         /// </summary>
         /// <param name="queryString"></param>

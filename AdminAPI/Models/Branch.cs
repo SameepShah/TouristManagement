@@ -28,4 +28,19 @@ namespace AdminAPI.Models
         public DateTime? ModifiedDate { get; set; }
     }
 
+    public class SearchBranch
+    {
+        [JsonProperty(PropertyName = "id")]
+        public string? id { get; set; }
+
+        [JsonProperty(PropertyName = "BranchCode")]
+        public string? BranchCode { get; set; }
+
+        [JsonProperty(PropertyName = "BranchName")]
+        public string? BranchName { get; set; }
+
+        [JsonProperty(PropertyName = "Place")]
+        public string? Place { get; set; }
+    }
+
 }

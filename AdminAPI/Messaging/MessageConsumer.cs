@@ -44,10 +44,10 @@ namespace AdminAPI.Messaging
                     var branches = JsonSerializer.Deserialize<List<Branch>>(messageResponse);
                     if (branches != null && branches.Count > 0)
                     {
-                        //Set into Azure RedisCache
-                        serializedData = JsonSerializer.Serialize(branches);
-                        dataAsByteArray = Encoding.UTF8.GetBytes(serializedData);
-                        _cache.Set("branches", dataAsByteArray);
+                        //Set into Azure RedisCache (Uncomment Once Azure Connection is Up)
+                        //serializedData = JsonSerializer.Serialize(branches);
+                        //dataAsByteArray = Encoding.UTF8.GetBytes(serializedData);
+                        //_cache.Set("branches", dataAsByteArray);
                     }
                 }
             };
