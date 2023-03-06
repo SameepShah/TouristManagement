@@ -64,7 +64,7 @@ namespace AdminAPI.Controllers
             {
                 dataAsByteArray = await _cache.GetAsync("branches");
             }
-            catch (Exception ex)
+            catch
             {
             }
             List<Branch> branches = new List<Branch>();
@@ -82,16 +82,24 @@ namespace AdminAPI.Controllers
             if (branches.Any())
             {
                 //Logic for Filtering Data based on Search Criteria
-                var branchesResult = branches.Where(x => (!String.IsNullOrEmpty(searchCriteria.id) ? x.id.ToLower() == searchCriteria.id.ToLower() : true) &&  
-                                                         (!String.IsNullOrEmpty(searchCriteria.BranchCode) ? x.BranchCode.ToLower() == searchCriteria.BranchCode.ToLower() : true) &&
-                                                         (!String.IsNullOrEmpty(searchCriteria.BranchName) ? x.BranchName.ToLower() == searchCriteria.BranchName.ToLower() : true) && 
-                                                         (!String.IsNullOrEmpty(searchCriteria.Place) ? x.Places.Any(p => p.PlaceName.ToLower() ==  searchCriteria.Place.ToLower()) : true)).ToList();
-                if (branchesResult.Count > 0)
+                try
                 {
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branchesResult));
+                    var branchesResult = branches.Where(x => (!String.IsNullOrEmpty(searchCriteria.id) ? x.id.ToLower() == searchCriteria.id.ToLower() : true) &&
+                                                             (!String.IsNullOrEmpty(searchCriteria.BranchCode) ? x.BranchCode.ToLower() == searchCriteria.BranchCode.ToLower() : true) &&
+                                                             (!String.IsNullOrEmpty(searchCriteria.BranchName) ? x.BranchName.ToLower() == searchCriteria.BranchName.ToLower() : true) &&
+                                                             (!String.IsNullOrEmpty(searchCriteria.Place) ? x.Places.Any(p => p.PlaceName.ToLower() == searchCriteria.Place.ToLower()) : true)).ToList();
+                    if (branchesResult.Count > 0)
+                    {
+                        return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branchesResult));
+                    }
+                    else
+                    {
+                        return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, "No places found with search criteria."));
+                    }
                 }
-                else {
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, "No places found with search criteria."));
+                catch (Exception ex)
+                {
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.InternalServerError, ex.Message));
                 }
             }
             else
