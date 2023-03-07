@@ -12,10 +12,12 @@ namespace BranchAPI.Controllers
     {
         private readonly IPlaceService _placeService;
         private readonly IBranchService _branchService;
-        public BranchController(IPlaceService placeService, IBranchService branchService)
+        private readonly ILogger<BranchController> _logger;
+        public BranchController(IPlaceService placeService, IBranchService branchService, ILogger<BranchController> logger)
         {
             _placeService = placeService;
             _branchService = branchService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -44,6 +46,7 @@ namespace BranchAPI.Controllers
         [Route("branches")]
         public async Task<IActionResult> GetAllBranches()
         {
+            _logger.LogInformation($"Branch Controller: GetAllBranches Called - {DateTime.UtcNow.ToString()}");
             var branches = await _branchService.GetAllAsync("SELECT * FROM c");
 
             if (!branches.Any())
@@ -62,6 +65,7 @@ namespace BranchAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBranch(Branch branch)
         {
+            _logger.LogInformation($"Branch Controller: AddBranch Called - {DateTime.UtcNow.ToString()}");
             if (ModelState.IsValid)
             {
                 if (branch.Places == null || branch.Places.Count <= 0)

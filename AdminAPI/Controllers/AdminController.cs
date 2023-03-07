@@ -20,12 +20,14 @@ namespace AdminAPI.Controllers
         private readonly IAdminService _adminService;
         private readonly IMessageConsumer _consumer;
         private readonly IDistributedCache _cache;
+        private readonly ILogger<AdminController> _logger;
 
-        public AdminController(IAdminService adminService, IMessageConsumer consumer, IDistributedCache cache)
+        public AdminController(IAdminService adminService, IMessageConsumer consumer, IDistributedCache cache, ILogger<AdminController> logger)
         {
             _adminService = adminService;
             _consumer = consumer;
             _cache = cache;
+            _logger = logger;
         }
 
         //Controller Endpoints here
@@ -59,6 +61,7 @@ namespace AdminAPI.Controllers
         [Route("search")]
         public async Task<IActionResult> SearchPlaces(SearchBranch searchCriteria)
         {
+            _logger.LogInformation($"Admin Controller: SearchPlaces Called - {DateTime.UtcNow.ToString()}");
             //Get from RedisCache else from Database
             string? serializedData = null;
             byte[]? dataAsByteArray = null;
@@ -66,8 +69,9 @@ namespace AdminAPI.Controllers
             {
                 dataAsByteArray = await _cache.GetAsync("branches");
             }
-            catch
+            catch(Exception ex)
             {
+                _logger.LogError($"Admin Controller Exception: SearchPlaces Redis Cache Exception - {DateTime.UtcNow.ToString()}", ex);
             }
             List<Branch> branches = new List<Branch>();
             if ((dataAsByteArray?.Count() ?? 0) > 0)
@@ -104,6 +108,7 @@ namespace AdminAPI.Controllers
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError($"Admin Controller Exception: SearchPlaces Exception - {DateTime.UtcNow.ToString()}", ex);
                     return await Task.FromResult(StatusCode((int)HttpStatusCode.InternalServerError, ex.Message));
                 }
             }

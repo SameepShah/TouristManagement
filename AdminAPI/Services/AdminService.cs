@@ -8,11 +8,12 @@ namespace AdminAPI.Services
     {
         private readonly ICosmosDBService _cosmosService;
         private readonly Container _container;
-
-        public AdminService(ICosmosDBService cosmosService)
+        private readonly ILogger<AdminService> _logger;
+        public AdminService(ICosmosDBService cosmosService, ILogger<AdminService> logger)
         {
             _cosmosService = cosmosService;
             _container = _cosmosService.GetContainer("Branches");
+            _logger = logger;
         }
 
         /// <summary>
@@ -23,6 +24,7 @@ namespace AdminAPI.Services
         /// <returns></returns>
         public async Task<List<Branch>> GetAllAsync(string queryString)
         {
+            _logger.LogInformation($"Admin Service: GetAllAsync Called - {DateTime.UtcNow.ToString()}");
             var query = _container.GetItemQueryIterator<Branch>(new QueryDefinition(queryString));
             List<Branch> results = new List<Branch>();
             while (query.HasMoreResults)
@@ -30,6 +32,7 @@ namespace AdminAPI.Services
                 var response = await query.ReadNextAsync();
                 results.AddRange(response.ToList());
             }
+            _logger.LogInformation($"Admin Service: GetAllAsync Call Completed - {DateTime.UtcNow.ToString()}");
             return results;
         }
     }
