@@ -1,4 +1,5 @@
 using AdminAPI.Messaging;
+using AdminAPI.Middlewares.Extensions;
 using AdminAPI.Services;
 using AdminAPI.Services.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
@@ -32,6 +33,10 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.AddControllers();
+
+//Consul Configuration
+builder.Services.AddConsulConfig(builder.Configuration);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -48,6 +53,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+//Consul Configuration
+app.UseConsul(app.Configuration);
 
 app.MapControllers();
 

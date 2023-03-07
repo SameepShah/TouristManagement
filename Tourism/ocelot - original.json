@@ -1,0 +1,79 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7156"
+  },
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/places/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/branch/places",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7276
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/branches/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/branch/branches",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7276
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/branch/",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/branch/addbranch",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7276
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/editbranch/",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/branch/editbranch",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7276
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/admin/consume",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/admin/consume",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7052
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/tourism/api/v1/admin/search",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/admin/search",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7052
+        }
+      ]
+    }
+  ]
+}

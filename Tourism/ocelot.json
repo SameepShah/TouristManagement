@@ -1,79 +1,36 @@
 {
-  "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7156"
-  },
   "Routes": [
     {
-      "UpstreamPathTemplate": "/tourism/api/v1/places/",
-      "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/branch/places",
+      "UseServiceDiscovery": true,
+      "DownstreamPathTemplate": "/api/branch/{anything}",
       "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7276
-        }
-      ]
+      "ServiceName": "branchservice",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/tourism/api/v1/branch/{anything}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "RouteIsCaseSensitive": false
     },
     {
-      "UpstreamPathTemplate": "/tourism/api/v1/branches/",
-      "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/branch/branches",
+      "UseServiceDiscovery": true,
+      "DownstreamPathTemplate": "/api/admin/{anything}",
       "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7276
-        }
-      ]
-    },
-    {
-      "UpstreamPathTemplate": "/tourism/api/v1/branch/",
-      "UpstreamHttpMethod": [ "Post" ],
-      "DownstreamPathTemplate": "/api/branch/addbranch",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7276
-        }
-      ]
-    },
-    {
-      "UpstreamPathTemplate": "/tourism/api/v1/editbranch/",
-      "UpstreamHttpMethod": [ "Post" ],
-      "DownstreamPathTemplate": "/api/branch/editbranch",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7276
-        }
-      ]
-    },
-    {
-      "UpstreamPathTemplate": "/tourism/api/v1/admin/consume",
-      "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/admin/consume",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7052
-        }
-      ]
-    },
-    {
-      "UpstreamPathTemplate": "/tourism/api/v1/admin/search",
-      "UpstreamHttpMethod": [ "Post" ],
-      "DownstreamPathTemplate": "/api/admin/search",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7052
-        }
-      ]
+      "ServiceName": "adminservice",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/tourism/api/v1/admin/{anything}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "RouteIsCaseSensitive": false
     }
-  ]
+  ],
+  "GlobalConfiguration": {
+    "ServiceDiscoveryProvider": {
+      "Scheme": "http",
+      "Host": "localhost",
+      "Port": 8500,
+      "Type": "Consul"
+    }
+  }
 }

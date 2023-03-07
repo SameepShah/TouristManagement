@@ -1,4 +1,5 @@
 using BranchAPI.Messaging;
+using BranchAPI.Middlewares.Extensions;
 using BranchAPI.Services;
 using BranchAPI.Services.Interfaces;
 using FluentValidation.AspNetCore;
@@ -26,10 +27,15 @@ builder.Services.AddControllers().AddFluentValidation(options =>
 
     // Automatic registration of validators in assembly
     options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-}); 
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddConsulConfig(builder.Configuration);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 var app = builder.Build();
 
@@ -44,6 +50,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
 
+app.UseConsul(app.Configuration);
+app.MapControllers();
 app.Run();
