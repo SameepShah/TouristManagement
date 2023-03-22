@@ -5,11 +5,13 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{6A40E205-64D5-4CA7-BA75-2F98EE6B2BB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchAPI", "BranchAPI\BranchAPI.csproj", "{303F6577-57F1-4BFF-A2F5-EF5363985DA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BranchAPI", "BranchAPI\BranchAPI.csproj", "{303F6577-57F1-4BFF-A2F5-EF5363985DA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminAPI", "AdminAPI\AdminAPI.csproj", "{8C49E47A-4990-4CD4-B4B1-BAE2E40B385A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminAPI", "AdminAPI\AdminAPI.csproj", "{8C49E47A-4990-4CD4-B4B1-BAE2E40B385A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tourism", "Tourism\Tourism.csproj", "{62991F4C-D9FE-4D20-9B45-E5231C818DE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tourism", "Tourism\Tourism.csproj", "{62991F4C-D9FE-4D20-9B45-E5231C818DE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchAPITests", "BranchAPITests\BranchAPITests.csproj", "{D5B385FB-A6EA-41E5-AF92-09237E3C236C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{62991F4C-D9FE-4D20-9B45-E5231C818DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62991F4C-D9FE-4D20-9B45-E5231C818DE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62991F4C-D9FE-4D20-9B45-E5231C818DE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5B385FB-A6EA-41E5-AF92-09237E3C236C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5B385FB-A6EA-41E5-AF92-09237E3C236C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5B385FB-A6EA-41E5-AF92-09237E3C236C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5B385FB-A6EA-41E5-AF92-09237E3C236C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{303F6577-57F1-4BFF-A2F5-EF5363985DA9} = {6A40E205-64D5-4CA7-BA75-2F98EE6B2BB5}
 		{8C49E47A-4990-4CD4-B4B1-BAE2E40B385A} = {6A40E205-64D5-4CA7-BA75-2F98EE6B2BB5}
+		{D5B385FB-A6EA-41E5-AF92-09237E3C236C} = {6A40E205-64D5-4CA7-BA75-2F98EE6B2BB5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D0947C9-E7E9-4465-80AD-82767F96AAE0}

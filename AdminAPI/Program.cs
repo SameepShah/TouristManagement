@@ -38,6 +38,7 @@ builder.Services.AddSingleton<ICosmosDBService>(options => {
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetSection("RedisCache").GetValue<string>("ConnectionString");
+    options.InstanceName = "AdminService_";
 });
 
 builder.Services.AddControllers();

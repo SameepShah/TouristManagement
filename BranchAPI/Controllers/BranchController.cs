@@ -51,7 +51,7 @@ namespace BranchAPI.Controllers
 
             if (!branches.Any())
             {
-                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, "Empty"));
+                return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound));
             }
             return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches.ToList()));
         }
