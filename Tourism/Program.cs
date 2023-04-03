@@ -4,7 +4,8 @@ using Ocelot.Provider.Consul;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddCors(options => {
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("CORSPolicy", builder => builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed((hosts) => true));
 });
 // Add services to the container.
@@ -17,6 +18,7 @@ builder.Services.AddOcelot(builder.Configuration).AddConsul();
 
 var app = builder.Build();
 
+app.UseCors("CORSPolicy");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
