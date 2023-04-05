@@ -62,6 +62,7 @@ namespace AdminAPI.Controllers
         public async Task<IActionResult> SearchPlaces(SearchBranch searchCriteria)
         {
             _logger.LogInformation($"Admin Controller: SearchPlaces Called - {DateTime.UtcNow.ToString()}");
+            SearchBranchResponse searchBranchResponse = new SearchBranchResponse();
             //Get from RedisCache else from Database
             string? serializedData = null;
             byte[]? dataAsByteArray = null;
@@ -94,16 +95,21 @@ namespace AdminAPI.Controllers
                                                              (!String.IsNullOrEmpty(searchCriteria.BranchCode) ? x.BranchCode!.ToLower() == searchCriteria.BranchCode.ToLower() : true) &&
                                                              (!String.IsNullOrEmpty(searchCriteria.BranchName) ? x.BranchName!.ToLower() == searchCriteria.BranchName.ToLower() : true) &&
                                                              (!String.IsNullOrEmpty(searchCriteria.Place) ? x.Places!.Any(p => p.PlaceName.ToLower() == searchCriteria.Place.ToLower()) : true)).ToList();
+                    searchBranchResponse.TotalRecords = branchesResult.Count;
                     if (branchesResult.Count > 0)
                     {
                         branchesResult = branchesResult.AsQueryable().OrderBy(searchCriteria.PaginationSorting.SortColumn!, searchCriteria.PaginationSorting.SortOrder)
                                                                      .Skip((searchCriteria.PaginationSorting.PageIndex - 1) * searchCriteria.PaginationSorting.PageSize)
                                                                      .Take(searchCriteria.PaginationSorting.PageSize).ToList();
-                        return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branchesResult));
+                        searchBranchResponse.Branches = branchesResult;
+                        return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, searchBranchResponse));
                     }
                     else
                     {
-                        return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, "No places found with search criteria."));
+                        searchBranchResponse.TotalRecords = 0;
+                        searchBranchResponse.Branches = branches;
+                        searchBranchResponse.Message = "No places found with search criteria.";
+                        return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, searchBranchResponse));
                     }
                 }
                 catch (Exception ex)
@@ -114,7 +120,10 @@ namespace AdminAPI.Controllers
             }
             else
             {
-                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, "No places Found."));
+                searchBranchResponse.TotalRecords = 0;
+                searchBranchResponse.Branches = branches;
+                searchBranchResponse.Message = "No places Found.";
+                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, searchBranchResponse));
             }
         }
 

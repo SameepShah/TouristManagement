@@ -28,6 +28,13 @@ namespace AdminAPI.Models
         public DateTime? ModifiedDate { get; set; }
     }
 
+    public class SearchBranchResponse
+    {
+        public List<Branch> Branches { get; set; }
+        public int TotalRecords { get; set; }
+        public string Message { get; set; }
+    }
+
     public class SearchBranch
     {
         [JsonProperty(PropertyName = "id")]
