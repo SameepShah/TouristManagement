@@ -107,7 +107,7 @@ namespace AdminAPI.Controllers
                     else
                     {
                         searchBranchResponse.TotalRecords = 0;
-                        searchBranchResponse.Branches = branches;
+                        searchBranchResponse.Branches = branchesResult;
                         searchBranchResponse.Message = "No places found with search criteria.";
                         return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, searchBranchResponse));
                     }
@@ -123,7 +123,7 @@ namespace AdminAPI.Controllers
                 searchBranchResponse.TotalRecords = 0;
                 searchBranchResponse.Branches = branches;
                 searchBranchResponse.Message = "No places Found.";
-                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, searchBranchResponse));
+                return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, searchBranchResponse));
             }
         }
 
