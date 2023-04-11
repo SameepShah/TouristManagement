@@ -101,6 +101,10 @@ namespace AdminAPI.Controllers
                         branchesResult = branchesResult.AsQueryable().OrderBy(searchCriteria.PaginationSorting.SortColumn!, searchCriteria.PaginationSorting.SortOrder)
                                                                      .Skip((searchCriteria.PaginationSorting.PageIndex - 1) * searchCriteria.PaginationSorting.PageSize)
                                                                      .Take(searchCriteria.PaginationSorting.PageSize).ToList();
+
+                        //Sort Places with TariffAmount Decending
+                        branchesResult.ForEach(x => x.Places = x.Places?.OrderByDescending(y => y.TariffAmount).ToList());
+
                         searchBranchResponse.Branches = branchesResult;
                         return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, searchBranchResponse));
                     }
