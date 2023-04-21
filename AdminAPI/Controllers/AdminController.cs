@@ -79,7 +79,7 @@ namespace AdminAPI.Controllers
             {
                 serializedData = Encoding.UTF8.GetString(dataAsByteArray!);
                 branches = JsonSerializer.Deserialize<List<Branch>>(serializedData);
-                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches));
+                //return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches));
             }
             else
             {
