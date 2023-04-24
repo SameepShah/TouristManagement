@@ -126,7 +126,7 @@ namespace AdminAPI.Controllers
             {
                 searchBranchResponse.TotalRecords = 0;
                 searchBranchResponse.Branches = branches;
-                searchBranchResponse.Message = "No places Found.";
+                searchBranchResponse.Message = "No places found.";
                 return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, searchBranchResponse));
             }
         }
