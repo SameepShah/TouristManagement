@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tourism", "Tourism\Tourism.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BranchAPITests", "BranchAPITests\BranchAPITests.csproj", "{D5B385FB-A6EA-41E5-AF92-09237E3C236C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationManager", "AuthenticationManager\AuthenticationManager.csproj", "{F34CCE63-8F07-4A1F-816C-CA8AFF8DE727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationManager", "AuthenticationManager\AuthenticationManager.csproj", "{F34CCE63-8F07-4A1F-816C-CA8AFF8DE727}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationWebApi", "AuthenticationWebApi\AuthenticationWebApi.csproj", "{61A8AD00-AC0A-4D20-B3A7-4B4114D36221}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{F34CCE63-8F07-4A1F-816C-CA8AFF8DE727}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F34CCE63-8F07-4A1F-816C-CA8AFF8DE727}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F34CCE63-8F07-4A1F-816C-CA8AFF8DE727}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61A8AD00-AC0A-4D20-B3A7-4B4114D36221}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61A8AD00-AC0A-4D20-B3A7-4B4114D36221}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61A8AD00-AC0A-4D20-B3A7-4B4114D36221}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61A8AD00-AC0A-4D20-B3A7-4B4114D36221}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
