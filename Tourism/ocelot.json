@@ -1,5 +1,18 @@
 {
   "Routes": [
+    //Authentication Web API
+    {
+      "UseServiceDiscovery": true,
+      "DownstreamPathTemplate": "/api/account/{anything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "authenticationservice",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/tourism/api/v1/account/{anything}",
+      "UpstreamHttpMethod": [ "Post" ],
+      "RouteIsCaseSensitive": false
+    },
     {
       "UseServiceDiscovery": true,
       "DownstreamPathTemplate": "/api/branch/{anything}",
