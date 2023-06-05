@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AuthenticationManager.Models;
+using AuthenticationWebApi.Services.Interfaces;
+using AuthenticationWebApi.Models;
 
 namespace AuthenticationWebApi.Controllers
 {
@@ -10,9 +12,11 @@ namespace AuthenticationWebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly JwtTokenHandler _jwtTokenHandler;
-        public AccountController(JwtTokenHandler jwtTokenHandler)
+        private readonly IAuthService _authService;
+        public AccountController(JwtTokenHandler jwtTokenHandler, IAuthService authService)
         {
             _jwtTokenHandler = jwtTokenHandler;   
+            _authService = authService;
         }
 
         /// <summary>
@@ -22,9 +26,19 @@ namespace AuthenticationWebApi.Controllers
         /// <returns></returns>
         [Route("authenticate")]
         [HttpPost]
-        public ActionResult<AuthenticationResponse?> Authenticate(AuthenticationRequest authenticateRequest) 
+        public ActionResult<TokenResponse?> Authenticate(AuthenticationRequest authenticateRequest) 
         {
-            var authenticationResponse = _jwtTokenHandler.GenerateJwtToken(authenticateRequest);
+
+            List<User> users = Task.Run(() => _authService.GetAllAsync($"select * from c where c.UserName = {authenticateRequest.UserName} and c.Password = {authenticateRequest.Password}")).Result;
+            if (users == null)
+                return Unauthorized();
+
+            TokenRequest tokenRequest = new TokenRequest(){
+                UserName = users.FirstOrDefault()!.UserName,
+                Role = users.FirstOrDefault()!.Role
+            };
+
+            var authenticationResponse = _jwtTokenHandler.GenerateJwtToken(tokenRequest);
             if (authenticationResponse == null)
                 return Unauthorized();
             return Ok(authenticationResponse);

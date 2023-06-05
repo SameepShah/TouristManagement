@@ -1,3 +1,4 @@
+using AuthenticationManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Consul;
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
 builder.Services.AddOcelot(builder.Configuration).AddConsul();
+builder.Services.AddCustomJwtAuthentication();
 
 var app = builder.Build();
 
@@ -28,4 +30,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 await app.UseOcelot();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.Run();

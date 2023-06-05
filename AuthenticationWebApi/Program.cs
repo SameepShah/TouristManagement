@@ -1,9 +1,18 @@
 using AuthenticationManager;
 using AuthenticationWebApi.Middlewares.Extensions;
+using AuthenticationWebApi.Services;
+using AuthenticationWebApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<ICosmosDBService>(options => {
+    string url = builder.Configuration.GetSection("AzureCosmosDbSettings").GetValue<string>("URL");
+    string primaryKey = builder.Configuration.GetSection("AzureCosmosDbSettings").GetValue<string>("PrimaryKey");
+    string databaseName = builder.Configuration.GetSection("AzureCosmosDbSettings").GetValue<string>("DatabaseName");
+    return new CosmosDBService(url, primaryKey, databaseName);
+});
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<JwtTokenHandler>();
