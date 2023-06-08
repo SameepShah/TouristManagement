@@ -29,7 +29,7 @@ namespace AuthenticationWebApi.Controllers
         public ActionResult<TokenResponse?> Authenticate(AuthenticationRequest authenticateRequest) 
         {
 
-            List<User> users = Task.Run(() => _authService.GetAllAsync($"select * from c where c.UserName = {authenticateRequest.UserName} and c.Password = {authenticateRequest.Password}")).Result;
+            List<User> users = Task.Run(() => _authService.GetAllAsync($"select * from c where c.UserName = '{authenticateRequest.UserName}' and c.Password = '{authenticateRequest.Password}'")).Result;
             if (users == null)
                 return Unauthorized();
 
