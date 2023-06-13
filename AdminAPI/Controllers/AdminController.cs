@@ -49,7 +49,7 @@ namespace AdminAPI.Controllers
                 branches = JsonSerializer.Deserialize<List<Branch>>(serializedData);
                 return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches));
             }
-            return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, "No Branches Found in Redis Cache."));
+            return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, Messages.NO_BRANCHES_REDIS));
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace AdminAPI.Controllers
                     {
                         searchBranchResponse.TotalRecords = 0;
                         searchBranchResponse.Branches = branchesResult;
-                        searchBranchResponse.Message = "No places found with search criteria.";
+                        searchBranchResponse.Message = Messages.NO_PLACES_FOUND_SEARCH;
                         return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, searchBranchResponse));
                     }
                 }
@@ -125,7 +125,7 @@ namespace AdminAPI.Controllers
             {
                 searchBranchResponse.TotalRecords = 0;
                 searchBranchResponse.Branches = branches;
-                searchBranchResponse.Message = "No places found.";
+                searchBranchResponse.Message = Messages.NO_PLACES_FOUND;
                 return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, searchBranchResponse));
             }
         }

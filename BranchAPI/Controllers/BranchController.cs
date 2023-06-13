@@ -69,15 +69,15 @@ namespace BranchAPI.Controllers
             if (ModelState.IsValid)
             {
                 if (branch.Places == null || branch.Places.Count <= 0)
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Place details must not be empty."));
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, Messages.PLACE_NOT_EMPTY));
 
                 var tariffNullCount = branch.Places.Count(x => x.TariffAmount == null || x.TariffAmount.ToString() == "");
                 if(tariffNullCount > 0)
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff must not be empty."));
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, Messages.TARIFF_NOT_EMPTY));
 
                 var invalidtariffRangeCount = branch.Places.Count(x => x.TariffAmount is < 50000 or > 100000);
                 if(invalidtariffRangeCount > 0)
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff must be in range between 50000 to 100000."));
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, Messages.TARIFF_RANGE_VALIDATION));
 
                 BranchAddResponse response = await _branchService.AddBranchAsync(branch);
                 if (!string.IsNullOrEmpty(response.BranchId))
@@ -104,20 +104,20 @@ namespace BranchAPI.Controllers
             if (ModelState.IsValid)
             {
                 if (updateBranch.Places == null || updateBranch.Places.Count <= 0)
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Place details must not be empty."));
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, Messages.PLACE_NOT_EMPTY));
 
                 var tariffNullCount = updateBranch.Places.Count(x => x.TariffAmount == null || x.TariffAmount.ToString() == "");
                 if (tariffNullCount > 0)
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff must not be empty."));
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, Messages.TARIFF_NOT_EMPTY));
 
                 var invalidtariffRangeCount = updateBranch.Places.Count(x => x.TariffAmount is < 50000 or > 100000);
                 if (invalidtariffRangeCount > 0)
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, "Tariff must be in range between 50000 to 100000."));
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.BadRequest, Messages.TARIFF_RANGE_VALIDATION));
 
                 var req = await _branchService.UpdateBranchAsync(updateBranch);
                 if (string.IsNullOrEmpty(req.BranchId))
                 {
-                    return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, "Branch not found"));
+                    return await Task.FromResult(StatusCode((int)HttpStatusCode.NotFound, Messages.BRANCH_NOT_FOUND));
                 }
 
                 return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, req.BranchId));
