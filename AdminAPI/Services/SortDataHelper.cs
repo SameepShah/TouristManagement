@@ -4,6 +4,14 @@ namespace AdminAPI.Services
 {
     public static class SortDataHelper
     {
+        /// <summary>
+        /// Extension Method for OrderBy for IQueryable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="columnName"></param>
+        /// <param name="isAscending"></param>
+        /// <returns></returns>
         public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, string columnName, bool isAscending = true)
         {
             if (String.IsNullOrEmpty(columnName))

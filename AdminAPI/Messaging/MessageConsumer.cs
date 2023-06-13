@@ -24,9 +24,12 @@ namespace AdminAPI.Messaging
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            //ConsumeMessage("branch");
         }
 
+        /// <summary>
+        /// Consume Message from RabbitMQ Queue
+        /// </summary>
+        /// <param name="queueName"></param>
         public void ConsumeMessage(string queueName)
         {
             _channel.QueueDeclare(queue: queueName,

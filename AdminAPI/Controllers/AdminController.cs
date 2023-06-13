@@ -53,7 +53,7 @@ namespace AdminAPI.Controllers
         }
 
         /// <summary>
-        /// Search Places
+        /// Search Branches with Places
         /// </summary>
         /// <param name="searchCriteria"></param>
         /// <returns></returns>
@@ -79,7 +79,6 @@ namespace AdminAPI.Controllers
             {
                 serializedData = Encoding.UTF8.GetString(dataAsByteArray!);
                 branches = JsonSerializer.Deserialize<List<Branch>>(serializedData);
-                //return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, branches));
             }
             else
             {

@@ -57,7 +57,7 @@ namespace BranchAPI.Controllers
         }
 
         /// <summary>
-        /// Add Branch
+        /// Add Branch with Places
         /// </summary>
         /// <param name="branch"></param>
         /// <returns></returns>
@@ -93,7 +93,7 @@ namespace BranchAPI.Controllers
 
 
         /// <summary>
-        /// Update Branch Tariff Details
+        /// Update Branch/Places Tariff Details
         /// </summary>
         /// <param name="updateBranch"></param>
         /// <returns></returns>

@@ -58,7 +58,7 @@ namespace BranchAPI.Services
 
 
         /// <summary>
-        /// Add Branch Details
+        /// Add Branch Details and Send to RabbitMQ Queue
         /// </summary>
         /// <param name="branch"></param>
         /// <returns></returns>
@@ -125,7 +125,7 @@ namespace BranchAPI.Services
         }
 
         /// <summary>
-        /// Update Branch
+        /// Update Branch Details and Send to RabbitMQ Queue
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>

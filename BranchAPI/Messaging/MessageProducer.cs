@@ -16,6 +16,8 @@ namespace BranchAPI.Messaging
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
         }
+
+        //Publish Message to the RabbitMQ Queue
         public void SendMessage<T>(string queueName, T message)
         {
             _channel.QueueDeclare(queueName, exclusive: false);

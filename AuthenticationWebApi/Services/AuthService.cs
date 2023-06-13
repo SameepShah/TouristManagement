@@ -15,7 +15,11 @@ public class AuthService : IAuthService
         _logger = logger;
 
     }
-
+    /// <summary>
+    /// Get All Users from Database
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <returns></returns>
     public async Task<List<Models.User>> GetAllAsync(string queryString)
     {
         _logger.LogInformation($"Auth Service: GetAllAsync Called - {DateTime.UtcNow.ToString()}");

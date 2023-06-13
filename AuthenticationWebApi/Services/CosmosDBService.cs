@@ -12,7 +12,6 @@ namespace AuthenticationWebApi.Services
     {
         private readonly CosmosClient _client;
         private readonly string _database;
-        //private Container _container { get; set; }
         public CosmosDBService(string url, string primaryKey, string databaseName)
         {
             _database = databaseName;

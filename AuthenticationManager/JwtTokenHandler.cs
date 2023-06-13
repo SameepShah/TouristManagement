@@ -11,26 +11,21 @@ namespace AuthenticationManager
         public const string JWT_SECURITY_KEY = "QeThWmZq4t7w!z%C&F)J@NcRfUjXn2r5";
         private const int JWT_TOKEN_VALID_MINS = 20;
         private const int JWT_TOKEN_VALID_MAXS = 20;
-        //private List<UserAccount> _userAccountList;
         public JwtTokenHandler()
         {
-            //_userAccountList = new List<UserAccount>() { 
-            //    new UserAccount() {UserName = "admin", Password = "aDmIn", Role ="Administrator"},
-            //    new UserAccount() {UserName = "user1", Password = "user@1", Role = "Company" }
-            //};
         }
 
+        /// <summary>
+        /// Generate JWT Token for Provided User Details
+        /// </summary>
+        /// <param name="authenticationRequest"></param>
+        /// <returns></returns>
         public TokenResponse? GenerateJwtToken(TokenRequest authenticationRequest)
         {
             if (string.IsNullOrEmpty(authenticationRequest.UserName) || string.IsNullOrEmpty(authenticationRequest.Role)) {
                 return null;
             }
-
-            /* Validate UserName and Password from Database */
-            //var userAccount = _userAccountList.FirstOrDefault(x => x.UserName == authenticationRequest.UserName && x.Password == authenticationRequest.Password);
-            //if (userAccount == null)
-            //    return null;
-
+         
             var tokenExpiryTimestamp = DateTime.UtcNow.AddMinutes(JWT_TOKEN_VALID_MINS);
             var tokenKey = Encoding.ASCII.GetBytes(JWT_SECURITY_KEY);
             var claimsIdentity = new ClaimsIdentity(new List<Claim>

@@ -20,7 +20,7 @@ namespace AuthenticationWebApi.Controllers
         }
 
         /// <summary>
-        /// Authentication
+        /// Authenticate User and Generate Token
         /// </summary>
         /// <param name="authenticateRequest"></param>
         /// <returns></returns>
