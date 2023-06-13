@@ -30,7 +30,7 @@ namespace AuthenticationWebApi.Controllers
         {
 
             List<User> users = Task.Run(() => _authService.GetAllAsync($"select * from c where c.UserName = '{authenticateRequest.UserName}' and c.Password = '{authenticateRequest.Password}'")).Result;
-            if (users == null)
+            if (users == null || users.Count <= 0)
                 return Unauthorized();
 
             TokenRequest tokenRequest = new TokenRequest(){
