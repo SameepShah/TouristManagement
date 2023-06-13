@@ -52,6 +52,7 @@ namespace AuthenticationManager
             return new TokenResponse()
             {
                 UserName = authenticationRequest.UserName,
+                Role = authenticationRequest.Role,
                 JwtToken = token,
                 ExpiresIn = (int)tokenExpiryTimestamp.Subtract(DateTime.Now).TotalSeconds
             };

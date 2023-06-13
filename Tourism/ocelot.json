@@ -36,7 +36,7 @@
         "EnableRateLimiting": true,
         "Period": "60s",
         "PeriodTimespan": 60,
-        "Limit": 5
+        "Limit": 30
       }
     },
     {
@@ -54,9 +54,9 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       },
-      "RouteClaimsRequirement": {
-        "Role": "Administrator"
-      },
+      //"RouteClaimsRequirement": {
+      //  "Role": "Administrator"
+      //},
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
